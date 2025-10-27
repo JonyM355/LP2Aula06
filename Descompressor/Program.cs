@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq.Expressions;
+using Microsoft.Win32.SafeHandles;
 
 namespace Descompressor
 {
@@ -102,8 +104,21 @@ namespace Descompressor
         // Descomprimir texto no ficheiro e mostrar no ecrã
         private void Descomprime()
         {
-            throw new NotImplementedException(
-                "Descompressão não implementada");
+            string line;
+
+            FileStream fs = new FileStream(
+                ficheiro, FileMode.Open, FileAccess.Read);
+
+            GZipStream gzs = new GZipStream(fs, CompressionMode.Decompress);
+
+            StreamReader sr = new StreamReader(gzs);
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+            }
+
+            sr.Close();
         }
     }
 }
